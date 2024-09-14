@@ -12,6 +12,8 @@ export const chats = pgTable('chats', {
     fileKey: varchar('file_key').notNull()
 });
 
+export type DrizzleChat = typeof chats.$inferSelect;
+
 // chatId -> each message will belong to a chat, form 1 to many relation
 // chatId has foreign key reference to chats.id
 export const messages = pgTable('messages', {
