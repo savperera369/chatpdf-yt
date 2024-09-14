@@ -6,10 +6,11 @@ import { uploadToS3 } from '@/lib/s3';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-
+import { useRouter } from 'next/navigation';
 // mutation is just a funtion that allows you to hit the backend api
 
 const FileUpload = () => {
+    const router = useRouter();
     const [uploading, setUploading] = useState(false);
     const { mutate, isPending } = useMutation({
         mutationFn: async ({file_key, file_name } : { file_key: string; file_name: string; }) => {
@@ -40,11 +41,13 @@ const FileUpload = () => {
                 }
                 // create post request
                 mutate(data, {
-                    onSuccess: (data) => {
-                        toast.success(data.message);
+                    onSuccess: ({chat_id}) => {
+                        toast.success("Chat created!");
+                        router.push(`/chat/${chat_id}`);
                     },
                     onError: (err) => {
                         toast.error("Error creating chat");
+                        console.error(err);
                     }
                 });
                 console.log('data', data);
@@ -81,3 +84,7 @@ const FileUpload = () => {
 };
 
 export default FileUpload;
+
+// PINECONE TERMS
+// index -> database to store all our different vectors
+// namespace -> table, different namespace for each pdf, segment odf vector spaces

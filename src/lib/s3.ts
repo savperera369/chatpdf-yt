@@ -39,7 +39,7 @@ export async function uploadToS3(file: File) {
             file_name: file.name
         })
     } catch (error) {
-        
+        console.error(error);
     }
 }
 
