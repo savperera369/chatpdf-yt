@@ -1,7 +1,7 @@
 // download s3 file to our computer
 import AWS from 'aws-sdk';
 // import file system
-import fs from 'fs';
+import fs from 'fs/promises';
 
 export async function downloadFromS3(fileKey: string) {
     try {
@@ -26,7 +26,7 @@ export async function downloadFromS3(fileKey: string) {
         const obj = await s3.getObject(params).promise();
         // download to our tmp directory
         const file_name = `/tmp/pdf-${Date.now()}.pdf`;
-        fs.writeFileSync(file_name, obj.Body as Buffer);
+        fs.writeFile(file_name, obj.Body as Buffer);
         return file_name;
     } catch (error) {
         console.error(error);

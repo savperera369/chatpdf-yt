@@ -1,23 +1,39 @@
 'use client'
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Input } from './ui/input';
 import { useChat } from 'ai/react';
 import { Button } from './ui/button';
 import { Send } from 'lucide-react';
 import MessageList from './MessageList';
 
-type Props = {};
+type Props = {
+    chatId: number
+};
 
-const ChatComponent = (props: Props) => {
+const ChatComponent = ({ chatId }: Props) => {
     // message list
     // whenever we hit enter, input is sent to endpoint /api/chat
     // endpoint will return streaming output from chatgpt
+    // can pass additional information to our backend with body
     const {input, handleInputChange, handleSubmit, messages} = useChat({
-        api: '/api/chat'
+        api: '/api/chat',
+        body: {
+            chatId
+        }
     });
 
+    useEffect(() => {
+        const messageContainer = document.getElementById("message-container");
+        if (messageContainer) {
+            messageContainer.scrollTo({
+                top: messageContainer.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+    }, [messages]);
+
     return (
-        <div className="relative max-h-screen overflow-scroll">
+        <div className="relative max-h-screen overflow-scroll" id="message-container">
             <div className="sticky top-0 inset-x-0 p-2 bg-white h-fit">
                 {/* Header */}
                 <h3 className="text-xl font-bold">Chat</h3>
