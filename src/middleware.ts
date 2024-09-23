@@ -4,8 +4,9 @@
 import { authMiddleware } from "@clerk/nextjs/server";
 
 // this code will run necessary stuff to protect our routes
+// need to make /api/webhook public since stripe is the one hitting it
 export default authMiddleware({
-    publicRoutes: ["/"]
+    publicRoutes: ["/", '/api/webhook']
 });
 
 export const config = {
